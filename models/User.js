@@ -18,11 +18,5 @@ userSchema.pre('save', async function (next) {
     user.password = hash;
     next();
   });
-  userSchema.pre('save', async function(next){
-    const user = this;
-    if(user.isModified('password')){
-        user.password = await bcrypt.hash(user.password,10)
-    }
-    next();
-})
+
 module.exports=mongoose.model('users',userSchema)
