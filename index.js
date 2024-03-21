@@ -5,17 +5,17 @@ const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 
-
-
+app.get('/register', (req, res) => {
+    res.render('register');
+});
 app.get('/', (req, res) => {
     res.send('hello social media app');
-});
-
-app.get('/raouia',(req,res)=>{
-    //return res.status(200).send('hello chabeb !')
-    res.render('register')
 })
+
 
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
