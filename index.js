@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
-
+const roomRoutes = require('./routes/roomRoutes');
 require('dotenv').config();
 const app = express();
 app.use(express.json());
@@ -34,6 +34,7 @@ db.once("open", function () {
     console.log("database connected successfully..");
 });
 app.use('/api/auth', authRoutes);
+app.use('/api', roomRoutes);
 app.listen(process.env.PORT, () => {
     console.log(`app listening on port ${process.env.PORT}`);
 });
