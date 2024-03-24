@@ -51,16 +51,18 @@ router.delete('/reservations/:id', requireAuth, async (req, res) => {
 
 router.post('/reservations', requireAuth, async (req, res) => {
     try {
-        const { roomName, date, heureDebut, heureFin } = req.body;
+        const { roomId, date, heureDebut, heureFin } = req.body;
         const userId = req.userId;
 
-        const room = await Room.findOne({ nom: roomName }); 
+        // Vérifier si la salle de réunion existe
+        const room = await Room.findById(roomId);
         if (!room) {
             return res.status(404).json({ message: 'Salle de réunion non trouvée' });
         }
 
+        // Vérifier s'il existe déjà une réservation pour cette salle et cette plage horaire
         const existingReservation = await Reservation.findOne({
-            room: room._id,
+            room: roomId,
             date: date,
             $or: [
                 { heureDebut: { $lt: heureFin }, heureFin: { $gt: heureDebut } },
@@ -72,9 +74,10 @@ router.post('/reservations', requireAuth, async (req, res) => {
             return res.status(400).json({ message: 'La salle de réunion est déjà réservée pour cette plage horaire' });
         }
 
+        // Créer une nouvelle réservation
         const reservation = await Reservation.create({
             user: userId,
-            room: room._id,
+            room: roomId,
             date: date,
             heureDebut: heureDebut,
             heureFin: heureFin
@@ -86,5 +89,6 @@ router.post('/reservations', requireAuth, async (req, res) => {
         res.status(500).json({ message: 'Erreur lors de la réservation de la salle de réunion' });
     }
 });
+
 
 module.exports = router;
