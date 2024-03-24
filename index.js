@@ -2,13 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
+const ejsLayouts = require('express-ejs-layouts');
+const path = require('path'); 
 require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-
+app.use(ejsLayouts);
 app.get('/register', (req, res) => {
     res.render('register');
 });
@@ -16,25 +20,30 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
+app.get('/Addrooms', (req, res) => {
+    res.render('./Room/addRoom');
+});
 
 app.get('/', (req, res) => {
     res.send('hello social media app');
-})
+});
 
+// Montage des routes
+app.use('/api/auth', authRoutes);
+app.use('/api/crudRoom', roomRoutes);
+app.use('/api/crudReservation', reservationRoutes);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
-
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error;"));
 db.once("open", function () {
     console.log("database connected successfully..");
 });
-app.use('/api/auth', authRoutes);
-app.use('/api', roomRoutes);
+
 app.listen(process.env.PORT, () => {
     console.log(`app listening on port ${process.env.PORT}`);
 });
