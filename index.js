@@ -4,8 +4,16 @@ const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const ejsLayouts = require('express-ejs-layouts');
+const session = require('express-session'); 
 const path = require('path'); 
+const passport = require('passport'); 
+const nodemailer = require('nodemailer');
+
+
+
+
 require('dotenv').config();
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -13,6 +21,16 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(ejsLayouts);
+app.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get('/register', (req, res) => {
     res.render('register');
 });
@@ -27,15 +45,13 @@ app.get('/Addrooms', (req, res) => {
 app.get('/', (req, res) => {
     res.send('hello social media app');
 });
-
-// Montage des routes
+// Montez vos routes ici
 app.use('/api/auth', authRoutes);
 app.use('/api/crudRoom', roomRoutes);
 app.use('/api/crudReservation', reservationRoutes);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    
 });
 
 const db = mongoose.connection;

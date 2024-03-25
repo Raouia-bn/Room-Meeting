@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Room = require('../models/Room');
 const multer = require('multer');
-
+const userIsLoggedIn = require('../middleware/authMiddleware');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -15,15 +15,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }); 
 
-router.get('/listRoom', async (req, res) => {
+router.get('/list', async (req, res) => {
   try {
     const rooms = await Room.find();
-    res.render('Room/listRoom', { rooms: rooms }); 
+    res.render('Room/listRoom', { rooms: rooms });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 
 router.post('/Addrooms', upload.single('image'), async (req, res) => {

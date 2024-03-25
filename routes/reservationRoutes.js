@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Reservation = require('../models/Reservation');
-const Room = require('../models/Room'); // Import du modèle de la salle
-const  requireAuth  = require('../middleware/authMiddleware');
+const Room = require('../models/Room');
+const User = require('../models/User');
+
+const requireAuth = require('../middleware/authMiddleware');
+const { sendReservationConfirmationEmail, sendReservationModificationEmail, sendReservationCancellationEmail } = require('../utils/emailUtils');
+
 
 router.get('/reservations', requireAuth, async (req, res) => {
     try {
@@ -16,16 +20,23 @@ router.get('/reservations', requireAuth, async (req, res) => {
     }
 });
 
+
 router.put('/reservations/:id', requireAuth, async (req, res) => {
     try {
         const userId = req.userId;
         const reservationId = req.params.id;
         const updatedReservation = req.body;
+        
         const reservation = await Reservation.findOne({ _id: reservationId, user: userId });
         if (!reservation) {
             return res.status(404).json({ message: 'Réservation non trouvée' });
         }
+
         await Reservation.findByIdAndUpdate(reservationId, updatedReservation);
+
+        const userEmail = req.userEmail; 
+        await sendReservationModificationEmail(userEmail, reservation);
+
         res.json({ message: 'Réservation mise à jour avec succès' });
     } catch (error) {
         console.error(error);
@@ -37,11 +48,17 @@ router.delete('/reservations/:id', requireAuth, async (req, res) => {
     try {
         const userId = req.userId;
         const reservationId = req.params.id;
+        
         const reservation = await Reservation.findOne({ _id: reservationId, user: userId });
         if (!reservation) {
             return res.status(404).json({ message: 'Réservation non trouvée' });
         }
+
         await Reservation.findByIdAndDelete(reservationId);
+
+        const userEmail = req.userEmail; 
+        await sendReservationCancellationEmail(userEmail, reservation);
+
         res.json({ message: 'Réservation annulée avec succès' });
     } catch (error) {
         console.error(error);
@@ -52,15 +69,13 @@ router.delete('/reservations/:id', requireAuth, async (req, res) => {
 router.post('/reservations', requireAuth, async (req, res) => {
     try {
         const { roomId, date, heureDebut, heureFin } = req.body;
-        const userId = req.userId;
+        const userId = req.userId; 
 
-        // Vérifier si la salle de réunion existe
         const room = await Room.findById(roomId);
         if (!room) {
             return res.status(404).json({ message: 'Salle de réunion non trouvée' });
         }
 
-        // Vérifier s'il existe déjà une réservation pour cette salle et cette plage horaire
         const existingReservation = await Reservation.findOne({
             room: roomId,
             date: date,
@@ -74,18 +89,21 @@ router.post('/reservations', requireAuth, async (req, res) => {
             return res.status(400).json({ message: 'La salle de réunion est déjà réservée pour cette plage horaire' });
         }
 
-        // Créer une nouvelle réservation
         const reservation = await Reservation.create({
             user: userId,
             room: roomId,
             date: date,
-            heureDebut: heureDebut,
+            heureDebut: heureDebut, 
             heureFin: heureFin
         });
 
+        const user = await User.findById(userId); 
+        const userEmail = user.email;
+        await sendReservationConfirmationEmail(userEmail, reservation);
+        
         res.status(201).json({ message: 'Réservation effectuée avec succès', reservation });
     } catch (error) {
-        console.error(error);
+        console.error("Erreur lors de la réservation de la salle de réunion :", error); 
         res.status(500).json({ message: 'Erreur lors de la réservation de la salle de réunion' });
     }
 });
