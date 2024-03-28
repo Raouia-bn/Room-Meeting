@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const requireAuth = (req, res, next) => {
     const token = req.header('Authorization');
 
-
     if (!token || !token.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Authentication failed: invalid token' });
     }
@@ -12,12 +11,20 @@ const requireAuth = (req, res, next) => {
         const tokenData = token.split(' ')[1];
         const decodedToken = jwt.verify(tokenData, process.env.JWT_SECRET);
 
+        console.log('Decoded Token:', decodedToken);
+
+        if (!decodedToken || !decodedToken.userId) {
+            return res.status(401).json({ message: 'Authentication failed: invalid token' });
+        }
+
         req.userId = decodedToken.userId;
+        req.userRole = decodedToken.role || ''; 
+        req.user = decodedToken; // Définir req.user avec toutes les informations du token
         next();
     } catch (error) {
+        console.error('Authentication Error:', error);
         return res.status(401).json({ message: 'Authentication failed: invalid token' });
     }
 };
 
 module.exports = requireAuth;
-

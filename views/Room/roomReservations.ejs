@@ -1,0 +1,17 @@
+
+    
+ 
+    <h1>Réservations de la salle <%= room.nom %></h1>
+
+    <ul>
+        <% reservations.forEach(function(reservation) { %>
+            <li>
+                <strong>Description:</strong> <%= reservation.description %><br>
+                <strong>Date:</strong> <%= reservation.date %><br>
+                <strong>Heure de début:</strong> <%= reservation.heureDebut %><br>
+                <strong>Heure de fin:</strong> <%= reservation.heureFin %><br>
+            </li>
+        <% }); %>
+    </ul>
+
+

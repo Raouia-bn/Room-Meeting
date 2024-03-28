@@ -15,17 +15,15 @@ const setupTransporter = () => {
 };
 
 
-const sendReservationConfirmationEmail = async (userEmail, reservation) => {
+const sendReservationConfirmationEmail = async (userEmail, reservation, roomName) => {
     try {
-       
-
         const transporter = setupTransporter();
 
         await transporter.sendMail({
-            from: 'raouia.ben19@gmail.com', 
+            from: 'raouia.ben19@gmail.com',
             to: userEmail,
             subject: 'Confirmation de réservation',
-            html: `Votre réservation a été confirmée pour la salle ${reservation.room} le ${reservation.date} de ${reservation.heureDebut} à ${reservation.heureFin}.`
+            html: `Votre réservation a été confirmée pour la salle ${roomName} le ${reservation.date} de ${reservation.heureDebut} à ${reservation.heureFin}.`
         });
 
         console.log('E-mail de confirmation envoyé avec succès');
@@ -36,7 +34,7 @@ const sendReservationConfirmationEmail = async (userEmail, reservation) => {
 
 
 
-const sendReservationModificationEmail = async (userEmail, reservation) => {
+const sendReservationModificationEmail = async (userEmail, reservation, roomName) => {
     try {
         const transporter = setupTransporter();
 
@@ -45,7 +43,7 @@ const sendReservationModificationEmail = async (userEmail, reservation) => {
      
             to: userEmail,
             subject: 'Modification de réservation',
-            html: `Votre réservation pour la salle ${reservation.room} a été modifiée. Nouvelles informations : date: ${reservation.date}, heure de début: ${reservation.heureDebut}, heure de fin: ${reservation.heureFin}.`
+            html: `Votre réservation pour la salle ${roomName}a été modifiée. Nouvelles informations : date: ${reservation.date}, heure de début: ${reservation.heureDebut}, heure de fin: ${reservation.heureFin}.`
         });
 
         console.log('E-mail de modification envoyé avec succès');
@@ -55,7 +53,7 @@ const sendReservationModificationEmail = async (userEmail, reservation) => {
 };
 
 
-const sendReservationCancellationEmail = async (userEmail, reservation) => {
+const sendReservationCancellationEmail = async (userEmail, reservation, roomName) => {
     try {
         const transporter = setupTransporter();
 
@@ -64,7 +62,7 @@ const sendReservationCancellationEmail = async (userEmail, reservation) => {
            
             to: userEmail,
             subject: 'Annulation de réservation',
-            html: `Votre réservation pour la salle ${reservation.room} a été annulée.`
+            html: `Votre réservation pour la salle ${roomName} a été annulée.`
         });
 
         console.log('E-mail d\'annulation envoyé avec succès');

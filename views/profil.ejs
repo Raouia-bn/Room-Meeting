@@ -1,4 +1,10 @@
-<!-- profile.ejs -->
+<h1>Profil de <%= user.firstname %> <%= user.lastname %></h1>
+<p>Rôle : <%= user.role %></p>
+<form action="/api/auth/logout" method="post">
+    <button type="submit">Déconnexion</button>
+  </form>
+<% if (user.role === 'admin') { %>
+    <a href="/Addrooms">Ajouter une salle</a>
+<% } %>
 
-<p>Email: <%= user.email %></p>
 <a href="/api/crudRoom/list">Voir les chambres</a>

@@ -7,9 +7,9 @@ const ejsLayouts = require('express-ejs-layouts');
 const session = require('express-session'); 
 const path = require('path'); 
 const passport = require('passport'); 
-const nodemailer = require('nodemailer');
 
 
+const cookieParser = require('cookie-parser');
 
 
 require('dotenv').config();
@@ -26,7 +26,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
+app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,7 +41,19 @@ app.get('/login', (req, res) => {
 app.get('/Addrooms', (req, res) => {
     res.render('./Room/addRoom');
 });
-
+app.get('/listrooms', (req, res) => {
+    res.render('./Room/listRoom');
+});
+app.get('/fullcalendar/main.css', (req, res) => {
+    res.set('Content-Type', 'text/css');
+    res.sendFile(path.join(__dirname, 'node_modules', '@fullcalendar', 'main.css'));
+  });
+  
+  app.get('/fullcalendar/main.js', (req, res) => {
+    res.set('Content-Type', 'text/javascript');
+    res.sendFile(path.join(__dirname, 'node_modules', '@fullcalendar', 'main.js'));
+  });
+  
 app.get('/', (req, res) => {
     res.send('hello social media app');
 });

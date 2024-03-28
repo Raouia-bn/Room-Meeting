@@ -1,3 +1,4 @@
+
 <h1>Liste des chambres</h1>
 <% rooms.forEach(room => { %>
     <div>
@@ -5,12 +6,9 @@
         <p>Capacité: <%= room.capacite %></p>
         <p>Équipements: <%= room.equipements.join(', ') %></p>
         <p>Localisation: <%= room.localisation %></p>
- 
-       
         <img src="/<%= room.image %>" alt="Image de la chambre">
+      
 
-
+    <a href="/api/crudReservation/rooms/<%= room._id %>/reservations">Voir le calendrier</a>
     </div>
-
 <% }); %>
-

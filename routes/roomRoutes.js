@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const Room = require('../models/Room');
 const multer = require('multer');
 const userIsLoggedIn = require('../middleware/authMiddleware');
@@ -14,6 +15,22 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage }); 
+const isAdmin = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
+  try {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Vérifiez la validité du token avec la clé secrète
+    if (decodedToken.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Not an admin.' });
+    }
+    req.userId = decodedToken.userId;
+    next();
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token.' });
+  }
+};
 
 router.get('/list', async (req, res) => {
   try {
@@ -25,7 +42,7 @@ router.get('/list', async (req, res) => {
 });
 
 
-router.post('/Addrooms', upload.single('image'), async (req, res) => {
+router.post('/Addrooms', isAdmin, upload.single('image'), async (req, res) => {
   try {
   
     const { nom, capacite, equipements, localisation, disponibilite } = req.body;
@@ -33,14 +50,14 @@ router.post('/Addrooms', upload.single('image'), async (req, res) => {
 
   
     const room = await Room.create({ nom, capacite, equipements, localisation, disponibilite, image: imageUrl });
-
-    res.status(201).json({ room });
+    res.redirect('/api/crudRoom/list');
+   
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.put('/rooms/:id', async (req, res) => {
+router.put('/rooms/:id', isAdmin ,async (req, res) => {
   try {
     const { nom, capacite, equipements, localisation, disponibilite, image } = req.body;
     const room = await Room.findByIdAndUpdate(req.params.id, { nom, capacite, equipements, localisation, disponibilite, image }, { new: true });
@@ -50,7 +67,7 @@ router.put('/rooms/:id', async (req, res) => {
   }
 });
 
-router.delete('/rooms/:id', async (req, res) => {
+router.delete('/rooms/:id', isAdmin, async (req, res) => {
   try {
     const room = await Room.findByIdAndDelete(req.params.id);
     res.json({ message: 'Salle supprimée avec succès' });
@@ -58,5 +75,6 @@ router.delete('/rooms/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 module.exports = router;
