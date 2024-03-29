@@ -24,7 +24,7 @@ const reservationSchema = new mongoose.Schema({
   }
 , 
   description: { type: String }, 
-  statut: { type: String, enum: ['en_attente', 'confirmee', 'annulee'], default: 'en_attente' } 
+
 });
 
 module.exports = mongoose.model('Reservation', reservationSchema);

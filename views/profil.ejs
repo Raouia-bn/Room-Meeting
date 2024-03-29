@@ -3,8 +3,8 @@
 <form action="/api/auth/logout" method="post">
     <button type="submit">Déconnexion</button>
   </form>
-<% if (user.role === 'admin') { %>
+
     <a href="/Addrooms">Ajouter une salle</a>
-<% } %>
+
 
 <a href="/api/crudRoom/list">Voir les chambres</a>

@@ -19,7 +19,7 @@ const requireAuth = (req, res, next) => {
 
         req.userId = decodedToken.userId;
         req.userRole = decodedToken.role || ''; 
-        req.user = decodedToken; // Définir req.user avec toutes les informations du token
+        req.user = decodedToken; 
         next();
     } catch (error) {
         console.error('Authentication Error:', error);

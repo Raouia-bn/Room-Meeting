@@ -14,16 +14,28 @@ const setupTransporter = () => {
     });
 };
 
+const formatDate = (date) => {
+  
+    const day = date.getDate().toString().padStart(2, '0'); 
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const year = date.getFullYear();
+
+   
+    return `${day}/${month}/${year}`;
+};
 
 const sendReservationConfirmationEmail = async (userEmail, reservation, roomName) => {
     try {
         const transporter = setupTransporter();
 
+      
+        const formattedDate = formatDate(new Date(reservation.date));
+
         await transporter.sendMail({
             from: 'raouia.ben19@gmail.com',
             to: userEmail,
             subject: 'Confirmation de réservation',
-            html: `Votre réservation a été confirmée pour la salle ${roomName} le ${reservation.date} de ${reservation.heureDebut} à ${reservation.heureFin}.`
+            html: `Votre réservation a été confirmée pour la salle ${roomName} le ${formattedDate} de ${reservation.heureDebut} à ${reservation.heureFin}.`
         });
 
         console.log('E-mail de confirmation envoyé avec succès');
@@ -32,18 +44,18 @@ const sendReservationConfirmationEmail = async (userEmail, reservation, roomName
     }
 };
 
-
-
 const sendReservationModificationEmail = async (userEmail, reservation, roomName) => {
     try {
         const transporter = setupTransporter();
 
+        
+        const formattedDate = formatDate(new Date(reservation.date));
+
         await transporter.sendMail({
             from: 'raouia.ben19@gmail.com', 
-     
             to: userEmail,
             subject: 'Modification de réservation',
-            html: `Votre réservation pour la salle ${roomName}a été modifiée. Nouvelles informations : date: ${reservation.date}, heure de début: ${reservation.heureDebut}, heure de fin: ${reservation.heureFin}.`
+            html: `Votre réservation pour la salle ${roomName}a été modifiée. Nouvelles informations : date: ${formattedDate}, heure de début: ${reservation.heureDebut}, heure de fin: ${reservation.heureFin}.`
         });
 
         console.log('E-mail de modification envoyé avec succès');
@@ -52,14 +64,12 @@ const sendReservationModificationEmail = async (userEmail, reservation, roomName
     }
 };
 
-
 const sendReservationCancellationEmail = async (userEmail, reservation, roomName) => {
     try {
         const transporter = setupTransporter();
 
         await transporter.sendMail({
             from: 'raouia.ben19@gmail.com', 
-           
             to: userEmail,
             subject: 'Annulation de réservation',
             html: `Votre réservation pour la salle ${roomName} a été annulée.`

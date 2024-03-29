@@ -21,7 +21,7 @@ const isAdmin = (req, res, next) => {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Vérifiez la validité du token avec la clé secrète
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); 
     if (decodedToken.role !== 'admin') {
       return res.status(403).json({ message: 'Access denied. Not an admin.' });
     }
@@ -45,11 +45,11 @@ router.get('/list', async (req, res) => {
 router.post('/Addrooms', isAdmin, upload.single('image'), async (req, res) => {
   try {
   
-    const { nom, capacite, equipements, localisation, disponibilite } = req.body;
+    const { nom, capacite, equipements,description ,localisation } = req.body;
     const imageUrl = req.file.path; 
 
   
-    const room = await Room.create({ nom, capacite, equipements, localisation, disponibilite, image: imageUrl });
+    const room = await Room.create({ nom, capacite, equipements, description,localisation, image: imageUrl });
     res.redirect('/api/crudRoom/list');
    
   } catch (error) {
@@ -59,8 +59,8 @@ router.post('/Addrooms', isAdmin, upload.single('image'), async (req, res) => {
 
 router.put('/rooms/:id', isAdmin ,async (req, res) => {
   try {
-    const { nom, capacite, equipements, localisation, disponibilite, image } = req.body;
-    const room = await Room.findByIdAndUpdate(req.params.id, { nom, capacite, equipements, localisation, disponibilite, image }, { new: true });
+    const { nom, capacite, equipements,description, localisation, image } = req.body;
+    const room = await Room.findByIdAndUpdate(req.params.id, { nom, capacite, equipements,description,localisation, image }, { new: true });
     res.json(room);
   } catch (error) {
     res.status(400).json({ message: error.message });

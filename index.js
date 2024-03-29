@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(cookieParser());
-
+app.use(express.static('template'));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -44,15 +44,7 @@ app.get('/Addrooms', (req, res) => {
 app.get('/listrooms', (req, res) => {
     res.render('./Room/listRoom');
 });
-app.get('/fullcalendar/main.css', (req, res) => {
-    res.set('Content-Type', 'text/css');
-    res.sendFile(path.join(__dirname, 'node_modules', '@fullcalendar', 'main.css'));
-  });
-  
-  app.get('/fullcalendar/main.js', (req, res) => {
-    res.set('Content-Type', 'text/javascript');
-    res.sendFile(path.join(__dirname, 'node_modules', '@fullcalendar', 'main.js'));
-  });
+
   
 app.get('/', (req, res) => {
     res.send('hello social media app');
