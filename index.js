@@ -47,9 +47,9 @@ app.get('/listrooms', (req, res) => {
 
   
 app.get('/', (req, res) => {
-    res.send('hello social media app');
+    res.send('reservation app');
 });
-// Montez vos routes ici
+
 app.use('/api/auth', authRoutes);
 app.use('/api/crudRoom', roomRoutes);
 app.use('/api/crudReservation', reservationRoutes);

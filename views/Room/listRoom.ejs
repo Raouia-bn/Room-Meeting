@@ -38,6 +38,7 @@
                     <div class="container">
                         <div class="row g-4">
                             <% rooms.forEach(room => { %>
+                               
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="room-item shadow rounded overflow-hidden">
                                         <div class="position-relative">
@@ -50,23 +51,33 @@
                                             </div>
                                             <div class="d-flex mb-3">
                                                 <small class="border-end me-3 pe-3"><i class="fa fa-user text-primary me-2"></i><%= room.capacite %> Capacité</small>
-                                                <!-- Assurez-vous que le champ capacité dans votre modèle de données correspond à celui-ci -->
-                                                <!-- Ajoutez d'autres détails de la chambre ici si nécessaire -->
                                                 <small class="border-end me-3 pe-3"><i class="fa fa-map-marker text-primary me-2"></i><%= room.localisation %> Localisation</small>
                                             </div>
                                             <p class="text-body mb-3"><%= room.description %></p>
                                             <p class="text-body mb-3"><%= room.equipements %></p>
-                                            <!-- Assurez-vous que le champ description dans votre modèle de données correspond à celui-ci -->
                                             <div class="d-flex justify-content-between">
-                                                <a class="btn btn-sm btn-primary rounded py-2 px-4" href="#">Voir Détails</a>
-                                                <!-- Vous pouvez ajouter un lien vers une page détaillée de la chambre -->
-                                                <a class="btn btn-sm btn-dark rounded py-2 px-4"  href="/api/crudReservation/rooms/<%= room._id%>/reservations">Réserver Maintenant</a>
-                                                <!-- Assurez-vous de mettre en place la fonctionnalité de réservation -->
+                                                <% if   (user.role ==='user') { %>
+                                                    <a class="btn btn-sm btn-dark rounded py-2 px-4"  href="/api/crudReservation/rooms/<%= room._id%>/reservations">Réserver Maintenant</a>
+                                                <% } else if (user.role === 'admin') { %>
+                                                   
+                                                    <small class="border-end me-3 pe-3"><i class="fa fa-calendar text-primary me-2"></i>Voir Détails</small>
+                                                    
+                                                    <small class="border-end me-3 pe-3"><i class="fa fa-edit text-primary me-2"></i>Update</small>
+                                                    <small class="border-end me-3 pe-3">
+                                                        <a href="/api/crudRoom/Deleterooms/<%= room._id %>" class="delete-room-link" data-room-id="<%= room._id %>">
+                                                            <i class="fa fa-trash text-primary me-2"></i>Supprimer
+                                                        </a>
+                                                    </small>
+                                                    
+                                                  
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             <% }); %>
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -211,4 +222,34 @@
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const deleteLinks = document.querySelectorAll(".delete-room-link");
+        
+            deleteLinks.forEach(link => {
+                link.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer cette chambre ?");
+                    if (confirmDelete) {
+                        const roomId = link.getAttribute("data-room-id");
+                        fetch(link.getAttribute("href"), {
+                            method: 'DELETE'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // Faire quelque chose après la suppression, comme rediriger l'utilisateur
+                                window.location.reload(); // Recharger la page par exemple
+                            } else {
+                                throw new Error('Erreur lors de la suppression de la chambre');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                            // Gérer les erreurs
+                        });
+                    }
+                });
+            });
+        });
+        </script>
+        

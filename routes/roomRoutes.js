@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Room = require('../models/Room');
 const multer = require('multer');
-const userIsLoggedIn = require('../middleware/authMiddleware');
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -31,16 +31,29 @@ const isAdmin = (req, res, next) => {
     res.status(401).json({ message: 'Invalid token.' });
   }
 };
+const userIsLoggedIn = (req, res, next) => {
+ 
+  req.userIsLoggedIn = true;
+  req.user = {
+    role: 'admin'
+  };
+  next();
+};
 
-router.get('/list', async (req, res) => {
+
+router.get('/list', userIsLoggedIn, async (req, res) => {
   try {
+    const token = req.cookies.token;
+   
+   
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decodedToken.userId);
     const rooms = await Room.find();
-    res.render('Room/listRoom', { rooms: rooms });
+    res.render('Room/listRoom', { rooms: rooms, user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 router.post('/Addrooms', isAdmin, upload.single('image'), async (req, res) => {
   try {
@@ -67,7 +80,7 @@ router.put('/rooms/:id', isAdmin ,async (req, res) => {
   }
 });
 
-router.delete('/rooms/:id', isAdmin, async (req, res) => {
+router.delete('/Deleterooms/:id', isAdmin, async (req, res) => {
   try {
     const room = await Room.findByIdAndDelete(req.params.id);
     res.json({ message: 'Salle supprimée avec succès' });
