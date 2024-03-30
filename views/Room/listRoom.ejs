@@ -62,7 +62,10 @@
                                                    
                                                     <small class="border-end me-3 pe-3"><i class="fa fa-calendar text-primary me-2"></i>Voir Détails</small>
                                                     
-                                                    <small class="border-end me-3 pe-3"><i class="fa fa-edit text-primary me-2"></i>Update</small>
+                                                    <small class="border-end me-3 pe-3">
+
+                                                        <a href="/api/crudRoom/updateGetRoom/<%= room._id %>">
+                                                        <i class="fa fa-edit text-primary me-2"> </i>Update</a></small>
                                                     <small class="border-end me-3 pe-3">
                                                         <a href="/api/crudRoom/Deleterooms/<%= room._id %>" class="delete-room-link" data-room-id="<%= room._id %>">
                                                             <i class="fa fa-trash text-primary me-2"></i>Supprimer
@@ -221,8 +224,11 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+    <!-- Ajoutez la fenêtre contextuelle pour le formulaire de mise à jour -->
+
 
     <script>
+     
         document.addEventListener("DOMContentLoaded", () => {
             const deleteLinks = document.querySelectorAll(".delete-room-link");
         
@@ -252,4 +258,4 @@
             });
         });
         </script>
-        
+     

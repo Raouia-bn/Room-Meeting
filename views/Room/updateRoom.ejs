@@ -1,0 +1,33 @@
+<!-- updateRoom.ejs -->
+
+<div class="container">
+    <h2 class="text-center mb-4">Mettre à jour la chambre</h2>
+    <form action="/api/crudRoom/Updaterooms/<%= room._id %>" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="nom" class="form-label">Nom de la chambre</label>
+        <input type="text" class="form-control" id="nom" name="nom" value="<%= room.nom %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="capacite" class="form-label">Capacité</label>
+        <input type="number" class="form-control" id="capacite" name="capacite" value="<%= room.capacite %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="equipements" class="form-label">Équipements</label>
+        <textarea class="form-control" id="equipements" name="equipements" rows="3" required><%= room.equipements %></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="5" required><%= room.description %></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="localisation" class="form-label">Localisation</label>
+        <input type="text" class="form-control" id="localisation" name="localisation" value="<%= room.localisation %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Image de la chambre</label>
+        <input type="file" class="form-control" id="image" name="image">
+      </div>
+      <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    </form>
+  </div>
+  

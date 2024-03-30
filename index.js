@@ -41,10 +41,10 @@ app.get('/login', (req, res) => {
 app.get('/Addrooms', (req, res) => {
     res.render('./Room/addRoom');
 });
-app.get('/listrooms', (req, res) => {
-    res.render('./Room/listRoom');
-});
 
+app.get('/Updateroom', (req, res) => {
+    res.render('./Room/updateRoom');
+});
   
 app.get('/', (req, res) => {
     res.send('reservation app');
