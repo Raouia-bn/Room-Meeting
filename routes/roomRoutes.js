@@ -31,29 +31,31 @@ const isAdmin = (req, res, next) => {
     res.status(401).json({ message: 'Invalid token.' });
   }
 };
-const userIsLoggedIn = (req, res, next) => {
- 
-  req.userIsLoggedIn = true;
-  req.user = {
-    role: 'admin'
-  };
-  next();
-};
 
 
-router.get('/list', userIsLoggedIn, async (req, res) => {
+
+router.get('/list', async (req, res) => {
   try {
+    
     const token = req.cookies.token;
-   
-   
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decodedToken.userId);
+    let user = null;
+    if (token) {
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      
+      user = {
+        userId: decodedToken.userId,
+        role: decodedToken.role
+      };
+    }
+    
     const rooms = await Room.find();
-    res.render('Room/listRoom', { rooms: rooms, user });
+   
+    res.render('Room/listRoom', { rooms: rooms, user: user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 router.post('/Addrooms', isAdmin, upload.single('image'), async (req, res) => {
   try {
