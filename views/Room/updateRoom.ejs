@@ -1,33 +1,63 @@
-<!-- updateRoom.ejs -->
-
-<div class="container">
-    <h2 class="text-center mb-4">Mettre à jour la chambre</h2>
-    <form action="/api/crudRoom/Updaterooms/<%= room._id %>" method="POST" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="nom" class="form-label">Nom de la chambre</label>
-        <input type="text" class="form-control" id="nom" name="nom" value="<%= room.nom %>" required>
-      </div>
-      <div class="mb-3">
-        <label for="capacite" class="form-label">Capacité</label>
-        <input type="number" class="form-control" id="capacite" name="capacite" value="<%= room.capacite %>" required>
-      </div>
-      <div class="mb-3">
-        <label for="equipements" class="form-label">Équipements</label>
-        <textarea class="form-control" id="equipements" name="equipements" rows="3" required><%= room.equipements %></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" name="description" rows="5" required><%= room.description %></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="localisation" class="form-label">Localisation</label>
-        <input type="text" class="form-control" id="localisation" name="localisation" value="<%= room.localisation %>" required>
-      </div>
-      <div class="mb-3">
-        <label for="image" class="form-label">Image de la chambre</label>
-        <input type="file" class="form-control" id="image" name="image">
-      </div>
-      <button type="submit" class="btn btn-primary">Mettre à jour</button>
-    </form>
-  </div>
-  
+<div class="container-xxl bg-white p-0">
+    <!-- Formulaire de mise à jour de la chambre -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+                            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                                <h6 class="section-title text-center text-primary text-uppercase">Modifier la chambre</h6>
+                                <h3 class="mb-5"><span class="text-primary text-uppercase">Modifier</span> une chambre existante</h3>
+                            </div>
+                            <form action="/api/crudRoom/Updaterooms/<%= room._id %>" method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom de la chambre" value="<%= room.nom %>" required>
+                                        <label for="nom">Nom de la chambre</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="capacite" name="capacite" placeholder="Capacité" value="<%= room.capacite %>" required>
+                                        <label for="capacite">Capacité</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="localisation" name="localisation" placeholder="Localisation" value="<%= room.localisation %>" required>
+                                        <label for="localisation">Localisation</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="equipements" name="equipements" placeholder="Équipements" value="<%= room.equipements %>" required>
+                                        <label for="equipements">Équipements</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="description" name="description" placeholder="Description" rows="5" required><%= room.description %></textarea>
+                                        <label for="description">Description</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-floating">
+                                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                        <label for="image">Image</label>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-block" type="submit">Mettre à jour la chambre</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Formulaire de mise à jour de la chambre -->
+    <!-- Retour en haut -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>

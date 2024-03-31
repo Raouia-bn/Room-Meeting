@@ -1,0 +1,53 @@
+
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title text-center text-primary text-uppercase">Mes Reservations</h6>
+            <h1 class="mb-5">Explore Our <span class="text-primary text-uppercase">Reservations</span></h1>
+        </div>
+        <div class="container-xxl py-5"></div>
+    <div class="container">
+        <div class="row g-4">
+            <% reservations.forEach((reservation) => { %>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="room-item shadow rounded overflow-hidden">
+                        <div class="position-relative">
+                          
+                            <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4"></small>
+                        </div>
+                        <div class="p-4 mt-2">
+                            <div class="d-flex justify-content-between mb-3">
+                                <h5 class="mb-0"><%= reservation.room.nom %></h5>
+                            </div>
+                            <p class="text-body mb-3"><%= reservation.room.description %></p>
+                            <p>Date de réservation : <%= formattedDate(reservation.date) %></p>
+                            <p>Heure de début : <%= reservation.heureDebut %></p>
+                            <p>Heure de fin : <%= reservation.heureFin %></p>
+                            <p>Description : <%= reservation.description %></p>
+                            <div class="d-flex justify-content-between">
+                                <small class="border-end me-2 pe-1">
+                                    <a  href="/api/crudReservation/updateGetReservation/<%= reservation._id %>">
+                                    <i class="fa fa-edit text-primary me-1"> </i>Update</a></small>
+                                <small class="border-end me-2 pe-1">
+                                    <a href="/api/crudReservation/delete/<%= reservation._id %>" class="delete-reservation-link" > <i class="fa fa-trash text-primary me-2"></i>Supprimer </a>
+                                </small>
+                                
+                              
+                            
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            
+            <% }) %>
+        </div>
+    </div>
+    </div>
+</div>
+
+<% function formattedDate(dateString) {
+    const date = new Date(dateString);
+    const formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
+    return formattedDate;
+} %>

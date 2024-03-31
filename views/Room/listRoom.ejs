@@ -57,20 +57,12 @@
                                             <p class="text-body mb-3"><%= room.equipements %></p>
                                             <div class="d-flex justify-content-between">
                                                 <% if   (user.role ==='user') { %>
-                                                    <a class="btn btn-sm btn-dark rounded py-2 px-4"  href="/api/crudReservation/rooms/<%= room._id%>/reservations">Réserver Maintenant</a>
+                                                    <a class="btn btn-sm btn-dark rounded py-2 px-4"  href="/api/crudReservation/rooms/<%= room._id%>/reservations">Voir calendrier</a>
+                                                    <a class="btn btn-sm btn-dark rounded py-2 px-4"  href="/api/crudReservation/Reservation/add/<%= room._id %>">Réserver</a>
                                                 <% } else if (user.role === 'admin') { %>
-                                                   
-                                                    <small class="border-end me-3 pe-3"><i class="fa fa-calendar text-primary me-2"></i>Voir Détails</small>
-                                                    
-                                                    <small class="border-end me-3 pe-3">
-
-                                                        <a href="/api/crudRoom/updateGetRoom/<%= room._id %>">
-                                                        <i class="fa fa-edit text-primary me-2"> </i>Update</a></small>
-                                                    <small class="border-end me-3 pe-3">
-                                                        <a href="/api/crudRoom/Deleterooms/<%= room._id %>" class="delete-room-link" data-room-id="<%= room._id %>">
-                                                            <i class="fa fa-trash text-primary me-2"></i>Supprimer
-                                                        </a>
-                                                    </small>
+                                                    <small class="border-end me-3 pe-3"><a  href="/api/crudReservation/rooms/<%= room._id%>/reservations"><i class="fa fa-calendar text-primary me-2"></i>Voir calendrier</a></small>
+                                                    <small class="border-end me-3 pe-3"><a href="/api/crudRoom/updateGetRoom/<%= room._id %>"><i class="fa fa-edit text-primary me-2"></i>Update</a></small>
+                                                    <small class="border-end me-3 pe-3"><a href="/api/crudRoom/Deleterooms/<%= room._id %>" class="delete-room-link" data-room-id="<%= room._id %>"><i class="fa fa-trash text-primary me-2"></i>Supprimer</a> </small>
                                                     
                                                   
                                                 <% } %>
