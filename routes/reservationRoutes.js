@@ -80,9 +80,9 @@ router.post('/updatereservations/:id', async (req, res) => {
         });
 
         if (existingReservation) {
-            return res.status(400).json({ message: 'La salle de réunion est déjà réservée pour cette plage horaire' });
+           
+            alert('La salle de réunion est déjà réservée pour cette plage horaire');
         }
-
         await Reservation.findByIdAndUpdate(reservationId, updatedReservation);
 
         const user = await User.findById(userId); 
@@ -94,6 +94,7 @@ router.post('/updatereservations/:id', async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Erreur lors de la mise à jour de la réservation' });
     }
+    
 });
 
 router.get('/delete/:id', async (req, res) => {
