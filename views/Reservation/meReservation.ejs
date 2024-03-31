@@ -29,11 +29,9 @@
                                 <small class="border-end me-2 pe-1">
                                     <a  href="/api/crudReservation/updateGetReservation/<%= reservation._id %>">
                                     <i class="fa fa-edit text-primary me-1"> </i>Update</a></small>
-                                <small class="border-end me-2 pe-1">
-                                    <a href="/api/crudReservation/delete/<%= reservation._id %>" class="delete-reservation-link" > <i class="fa fa-trash text-primary me-2"></i>Supprimer </a>
-                                </small>
-                                
                               
+                                
+                                <small class="border-end me-3 pe-3"><a href="/api/crudReservation/delete/<%= reservation._id %>" class="delete-room-link" data-room-id="<%= reservation._id %>"><i class="fa fa-trash text-primary me-2"></i>Supprimer</a> </small>
                             
                         </div>
                         </div>

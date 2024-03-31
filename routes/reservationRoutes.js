@@ -95,7 +95,7 @@ router.post('/updatereservations/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.get('/delete/:id', async (req, res) => {
     try {
         const token = req.cookies.token;
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
@@ -118,8 +118,7 @@ router.delete('/delete/:id', async (req, res) => {
         const user = await User.findById(userId); 
         const userEmail = user.email;
         await sendReservationCancellationEmail(userEmail, reservation, room.nom);
-
-        res.json({ message: 'Réservation annulée avec succès' });
+        res.redirect('/api/crudReservation/Getreservations');
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erreur lors de l\'annulation de la réservation' });
