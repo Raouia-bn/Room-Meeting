@@ -26,8 +26,9 @@ router.get('/Getreservations', async (req, res) => {
     
         
         const userId = decodedToken.userId;
+        const user = await User.findById(userId); 
         const reservations = await Reservation.find({ user: userId }).populate('room');
-        res.render('Reservation/meReservation', { reservations });
+        res.render('Reservation/meReservation', { reservations,user });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erreur lors de la récupération des réservations de l\'utilisateur' });
