@@ -1,22 +1,132 @@
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .reservation-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .card {
+            flex-basis: calc(33.33% - 20px);
+            background-color: #f0f8ff; /* Light blue */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        strong {
+            color: #555;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #ffd700; /* Yellow */
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #ffcc00; /* Darker yellow */
+        }
+    </style>
 
-    
- 
-    <h1>Réservations de la salle <%= room.nom %></h1>
+<div class="container-fluid bg-dark px-0">
+    <div class="row gx-0">
+        <div class="col-lg-3 bg-dark d-none d-lg-block">
+            <a href="index.html" class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                <h1 class="m-0 text-primary text-uppercase">Reservy</h1>
+            </a>
+        </div>
+        <div class="col-lg-9">
+         
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
+                <a href="index.html" class="navbar-brand d-block d-lg-none">
+                    <h1 class="m-0 text-primary text-uppercase">Reservation</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto py-0">
+                      <a href="/api/auth/profil" class="nav-item nav-link active">Acceuil</a>
+                      <a href="/api/crudRoom/list" class="nav-item nav-link">Salle de reunion </a>
+                        
+                    </div>
+                    <form action="/api/auth/logout" method="post">
+                      <button class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block" type="submit">Déconnexion</button>
+                    </form>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+  </div>
+  <div>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title text-center text-primary text-uppercase">Reservation
 
-    <ul>
-        <% reservations.forEach(function(reservation) { %>
-            <li>
-                <strong>Description:</strong> <%= reservation.description %><br>
-                <strong>Date:</strong> <%= formattedDate(reservation.date) %><br>
-                <strong>Heure de début:</strong> <%= reservation.heureDebut %><br>
-                <strong>Heure de fin:</strong> <%= reservation.heureFin %><br>
-            </li>
-        <% }); %>
-    </ul>
-
-
+                </h6>
+                <h1 class="mb-5">Réservations de la salle <span class="text-primary text-uppercase"><%= room.nom %></span></h1>
+            </div>
+        
+        </div>
+    </div>
+  <div class="container">
+       
+        <div class="reservation-container">
+            <% reservations.forEach(function(reservation) { %>
+                <div class="card">
+                    <ul>
+                        <li><strong>Description:</strong> <%= reservation.description %></li>
+                        <li><strong>Date:</strong> <%= formattedDate(reservation.date) %></li>
+                        <li><strong>Heure de début:</strong> <%= reservation.heureDebut %></li>
+                        <li><strong>Heure de fin:</strong> <%= reservation.heureFin %></li>
+                    </ul>
+                </div>
+            <% }); %>
+        </div>
+        <div class="button-container">
+            <a href="/Api/crudRoom/List" class="button">Liste des salles</a>
+        </div>
+    </div>
+</div>
     <% function formattedDate(dateString) {
         const date = new Date(dateString);
-        const formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
-        return formattedDate;
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('fr-FR', options);
     } %>
+
