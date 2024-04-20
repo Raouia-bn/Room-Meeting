@@ -211,15 +211,15 @@
                         })
                         .then(response => {
                             if (response.ok) {
-                                // Faire quelque chose après la suppression, comme rediriger l'utilisateur
-                                window.location.reload(); // Recharger la page par exemple
+                          
+                                window.location.reload(); 
                             } else {
                                 throw new Error('Erreur lors de la suppression de la chambre');
                             }
                         })
                         .catch(error => {
                             console.error('Erreur:', error);
-                            // Gérer les erreurs
+                          
                         });
                     }
                 });
